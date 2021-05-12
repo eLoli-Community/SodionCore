@@ -13,6 +13,8 @@ dependencies {
     compile 'org.apache.maven.resolver:maven-resolver-transport-http:1.6.1'
     compile 'org.apache.maven:maven-resolver-provider:3.6.3'
     compile 'me.lucko:jar-relocator:1.4'
+
+    compile project(':SodionCore-Base')
 }
 
 assemble.dependsOn(shadowJar)

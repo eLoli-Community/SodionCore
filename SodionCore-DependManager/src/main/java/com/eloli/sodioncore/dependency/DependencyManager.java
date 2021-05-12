@@ -2,10 +2,10 @@ package com.eloli.sodioncore.dependency;
 
 import com.eloli.sodioncore.dependency.classloader.ReflectionClassLoader;
 import com.eloli.sodioncore.file.BaseFileService;
-import com.eloli.sodioncore.libs.maven.repository.internal.MavenRepositorySystemUtils;
 import com.eloli.sodioncore.logger.AbstractLogger;
 import me.lucko.jarrelocator.JarRelocator;
 import me.lucko.jarrelocator.Relocation;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.AbstractRepositoryListener;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositoryEvent;

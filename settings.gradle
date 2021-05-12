@@ -1,2 +1,4 @@
 rootProject.name = 'SodionCore'
-include(':SodionCore-Libs')
+include(':SodionCore-DependManager')
+include(':SodionCore-Base')
+
