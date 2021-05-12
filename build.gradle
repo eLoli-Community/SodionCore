@@ -17,11 +17,7 @@ dependencies {
     compileOnly 'io.netty:netty-all:4.1.63.Final'
 
     // Use when need DependManager
-    compile 'org.apache.maven.resolver:maven-resolver-impl:1.6.1'
-    compile 'org.apache.maven.resolver:maven-resolver-connector-basic:1.6.1'
-    compile 'org.apache.maven.resolver:maven-resolver-transport-http:1.6.1'
-    compile 'org.apache.maven:maven-resolver-provider:3.6.3'
-    compile 'me.lucko:jar-relocator:1.4'
+    compile project(path: ":SodionCore-Libs", configuration: "shadow")
 
     testImplementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'com.google.guava:guava:29.0-jre'

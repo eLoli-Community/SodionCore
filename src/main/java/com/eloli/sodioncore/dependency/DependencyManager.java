@@ -2,10 +2,10 @@ package com.eloli.sodioncore.dependency;
 
 import com.eloli.sodioncore.dependency.classloader.ReflectionClassLoader;
 import com.eloli.sodioncore.file.BaseFileService;
+import com.eloli.sodioncore.libs.maven.repository.internal.MavenRepositorySystemUtils;
 import com.eloli.sodioncore.logger.AbstractLogger;
 import me.lucko.jarrelocator.JarRelocator;
 import me.lucko.jarrelocator.Relocation;
-import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.AbstractRepositoryListener;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositoryEvent;
@@ -54,6 +54,11 @@ public class DependencyManager {
         this.logger = logger;
         this.mavenRepo = mavenRepo;
         rules = new ArrayList<>();
+        rules.add(new Relocation("org.apache.maven", "com.eloli.sodioncore.libs.maven"));
+        rules.add(new Relocation("org.apache.http", "com.eloli.sodioncore.libs.http"));
+        rules.add(new Relocation("org.apache.commons", "com.eloli.sodioncore.libs.commons"));
+        rules.add(new Relocation("org.objectweb.asm", "com.eloli.sodioncore.libs.asm"));
+        rules.add(new Relocation("org.codehaus.plexus", "com.eloli.sodioncore.libs.plexus"));
         relocateMap.forEach((key, value) -> {
             rules.add(new Relocation(key, value));
         });

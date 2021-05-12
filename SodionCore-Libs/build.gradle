@@ -1,0 +1,27 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.maven.resolver:maven-resolver-impl:1.6.1'
+    compile 'org.apache.maven.resolver:maven-resolver-connector-basic:1.6.1'
+    compile 'org.apache.maven.resolver:maven-resolver-transport-http:1.6.1'
+    compile 'org.apache.maven:maven-resolver-provider:3.6.3'
+    compile 'me.lucko:jar-relocator:1.4'
+}
+
+assemble.dependsOn(shadowJar)
+
+shadowJar {
+    relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
+    relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
+    relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
+    relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
+    relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
+    exclude('module-info.class')
+}
