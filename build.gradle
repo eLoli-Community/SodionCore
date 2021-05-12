@@ -1,0 +1,41 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'war'
+}
+
+group 'com.eloli.sodioncore'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Included by Minecraft
+    compileOnly 'com.google.code.gson:gson:2.8.6'
+    compileOnly 'com.google.guava:guava:29.0-jre'
+    compileOnly 'io.netty:netty-all:4.1.63.Final'
+
+    // Use when need DependManager
+    compile 'org.apache.maven.resolver:maven-resolver-impl:1.6.1'
+    compile 'org.apache.maven.resolver:maven-resolver-connector-basic:1.6.1'
+    compile 'org.apache.maven.resolver:maven-resolver-transport-http:1.6.1'
+    compile 'org.apache.maven:maven-resolver-provider:3.6.3'
+    compile 'me.lucko:jar-relocator:1.4'
+
+    testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'io.netty:netty-all:4.1.63.Final'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+assemble.dependsOn(shadowJar)
+
+shadowJar {
+}
+
+test {
+    useJUnitPlatform()
+}
