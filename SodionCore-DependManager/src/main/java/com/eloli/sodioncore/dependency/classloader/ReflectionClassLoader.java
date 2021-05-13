@@ -17,7 +17,7 @@ public class ReflectionClassLoader {
         if (classLoader instanceof URLClassLoader) {
             this.classLoader = (URLClassLoader) classLoader;
             try {
-                addUrlMethod = classLoader.getClass().getDeclaredMethod("addURL", URL.class);
+                addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
                 addUrlMethod.setAccessible(true);
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
