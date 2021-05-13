@@ -24,7 +24,13 @@ subprojects {
             }
         }
     }
-    shadowJar {
 
+    shadowJar {
+        relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
+        relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
+        relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
+        relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
+        relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
+        exclude('module-info.class')
     }
 }
