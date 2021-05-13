@@ -1,28 +1,25 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'java'
-    id 'maven-publish'
 }
-
-group 'com.eloli.sodioncore'
-version '1.0-SNAPSHOT'
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.github.johnrengelman.shadow'
     repositories {
         mavenCentral()
     }
+    dependencies {
+        compileOnly 'com.google.code.gson:gson:2.8.6'
+        compileOnly 'com.google.guava:guava:29.0-jre'
+        compileOnly 'io.netty:netty-all:4.1.63.Final'
 
-    assemble.dependsOn(shadowJar)
+        testImplementation 'com.google.code.gson:gson:2.8.6'
+        testImplementation 'com.google.guava:guava:29.0-jre'
+        testImplementation 'io.netty:netty-all:4.1.63.Final'
 
-    shadowJar {
-        relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
-        relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
-        relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
-        relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
-        relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
-        exclude('module-info.class')
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    }
+    test {
+        useJUnitPlatform()
     }
 }
