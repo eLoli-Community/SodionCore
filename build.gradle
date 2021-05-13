@@ -18,6 +18,7 @@ subprojects {
     assemble.dependsOn(shadowJar)
 
     shadowJar {
+        archiveName = "$baseName-$version.$extension"
         relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
         relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
         relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
