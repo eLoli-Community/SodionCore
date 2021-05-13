@@ -11,29 +11,24 @@ import java.util.List;
 
 public class OrmService implements AutoCloseable {
     public SessionFactory sessionFactory;
-    protected List<Class<? extends SodionEntity>> entities;
-    protected DatabaseConfigure config;
 
     public OrmService(DependencyManager dependencyManager, List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) throws Exception {
         dependencyManager.checkDependencyMaven(config.getDriverName());
 
         dependencyManager.checkDependencyMaven("org.hibernate.orm:hibernate-core:6.0.0.Alpha7:org.hibernate.Hibernate");
 
-        this.entities = entities;
-        this.config = config;
-    }
+        {
+            Configuration conf = new Configuration();
+            for (Class<? extends SodionEntity> entity : entities) {
+                conf.addAnnotatedClass(entity);
+            }
+            config.apply(conf);
+            conf.setProperty("hibernate.hbm2ddl.auto", "update");
 
-    public void connect(){
-        Configuration conf = new Configuration();
-        for (Class<? extends SodionEntity> entity : entities) {
-            conf.addAnnotatedClass(entity);
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(conf.getProperties()).build();
+            sessionFactory = conf.buildSessionFactory(serviceRegistry);
         }
-        config.apply(conf);
-        conf.setProperty("hibernate.hbm2ddl.auto", "update");
-
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .applySettings(conf.getProperties()).build();
-        sessionFactory = conf.buildSessionFactory(serviceRegistry);
     }
 
     @Override
