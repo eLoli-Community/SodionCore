@@ -89,7 +89,20 @@ public class DependencyManager {
         repositorySystemSession.setSystemProperty("os.detected.arch", System.getProperty("os.arch", "unknown").replaceAll("amd64", "x86_64"));
     }
 
-    public void checkDependencyMaven(String group, String name, String version) {
+    public void checkDependencyMaven(String packageName) {
+        String[] splits = packageName.split(":");
+
+        String group = splits[0];
+        String name = splits[1];
+        String version = splits[2];
+        String className = splits[3];
+
+        try {
+            Class.forName(className);
+            return;
+        } catch (ClassNotFoundException ignore) {
+
+        }
 
         File librariesPath = new File(fileService.getConfigPath("libraries"));
         librariesPath.mkdirs();

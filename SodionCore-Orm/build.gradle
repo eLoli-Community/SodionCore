@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group 'com.eloli.sodioncore'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':SodionCore-Base')
+    compile project(':SodionCore-DependManager')
+    compile 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
+    compile 'org.hibernate.orm:hibernate-entitymanager:6.0.0.Alpha7'
+
+    compileOnly 'com.google.code.gson:gson:2.8.6'
+    compileOnly 'com.google.guava:guava:29.0-jre'
+    compileOnly 'io.netty:netty-all:4.1.63.Final'
+
+    testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'io.netty:netty-all:4.1.63.Final'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testRuntimeOnly 'com.h2database:h2:1.4.200'
+}
+
+test {
+    useJUnitPlatform()
+}

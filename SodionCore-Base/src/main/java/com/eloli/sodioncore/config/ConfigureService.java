@@ -100,7 +100,7 @@ public class ConfigureService<C extends Configure> {
         }
     }
 
-    protected void save() throws IOException {
+    public void save() throws IOException {
         FileOutputStream fileWriter = new FileOutputStream(configFile);
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileWriter, StandardCharsets.UTF_8);

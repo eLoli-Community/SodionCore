@@ -1,4 +1,5 @@
 rootProject.name = 'SodionCore'
 include(':SodionCore-DependManager')
 include(':SodionCore-Base')
+include 'SodionCore-Orm'
 
