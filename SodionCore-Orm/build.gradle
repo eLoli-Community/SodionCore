@@ -1,14 +1,3 @@
-plugins {
-    id 'java'
-}
-
-group 'com.eloli.sodioncore'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile project(':SodionCore-Base')
     compile project(':SodionCore-DependManager')
@@ -25,8 +14,4 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     testRuntimeOnly 'com.h2database:h2:1.4.200'
-}
-
-test {
-    useJUnitPlatform()
 }
