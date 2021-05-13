@@ -18,12 +18,12 @@ public class ConfigureService<C extends Configure> {
     public C instance;
 
     @SuppressWarnings("unchecked")
-    public ConfigureService(BaseFileService fileService, String configName, String classPrefix) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+    public ConfigureService(BaseFileService fileService, String configName, String classPrefix, int currentVersion) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         this.fileService = fileService;
         this.classPrefix = classPrefix;
         configFile = new File(fileService.getConfigPath(configName));
         fileService.saveResource("probeResource", true);
-        currentVersion = (int) Class.forName(classPrefix + ".MainConfiguration").getField("version").get(null);
+        this.currentVersion = currentVersion;
         try {
             FileInputStream fileReader = new FileInputStream(configFile);
             InputStreamReader inputStreamReader = new InputStreamReader(fileReader, StandardCharsets.UTF_8);

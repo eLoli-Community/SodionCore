@@ -21,7 +21,7 @@ public class Config {
         ConfigureService<MainConfiguration> configureService = new ConfigureService<>(
                 baseFileService,
                 "config.json",
-                "com.eloli.sodioncore.test.config");
+                "com.eloli.sodioncore.test.config",2);
         assertEquals(configureService.instance.defaultLang, mainConfiguration.defaultLang);
 
     }
