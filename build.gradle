@@ -17,29 +17,20 @@ subprojects {
 
     assemble.dependsOn(shadowJar)
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
+    publishing {
+        publications {
+            shadow(MavenPublication) {
+                artifact shadowJar
+            }
+        }
     }
 
     shadowJar {
-        archiveName = "$baseName-$version.$extension"
         relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
         relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
         relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
         relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
         relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
         exclude('module-info.class')
-    }
-
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
-        archives shadowJar
     }
 }
