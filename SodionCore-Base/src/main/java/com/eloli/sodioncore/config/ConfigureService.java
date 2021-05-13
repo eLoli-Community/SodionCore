@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
 public class ConfigureService<C extends Configure> {
-    public static final int CURRENT_VERSION = 2;
+    protected final int currentVersion;
 
     protected final String classPrefix;
     protected final File configFile;
@@ -18,11 +18,12 @@ public class ConfigureService<C extends Configure> {
     public C instance;
 
     @SuppressWarnings("unchecked")
-    public ConfigureService(BaseFileService fileService, String configName, String classPrefix) throws Exception {
+    public ConfigureService(BaseFileService fileService, String configName, String classPrefix) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         this.fileService = fileService;
         this.classPrefix = classPrefix;
         configFile = new File(fileService.getConfigPath(configName));
         fileService.saveResource("probeResource", true);
+        currentVersion = (int) Class.forName(classPrefix + ".MainConfiguration").getField("version").get(null);
         try {
             FileInputStream fileReader = new FileInputStream(configFile);
             InputStreamReader inputStreamReader = new InputStreamReader(fileReader, StandardCharsets.UTF_8);
@@ -30,7 +31,7 @@ public class ConfigureService<C extends Configure> {
             inputStreamReader.close();
             fileReader.close();
             int version = result.get("version").getAsInt();
-            if (version < CURRENT_VERSION) {
+            if (version < currentVersion) {
                 instance = (C) migrate(version, ConfigGson.reader.fromJson(result, getConfigure(version)));
             } else {
                 instance = (C) ConfigGson.reader.fromJson(result, Class.forName(classPrefix + ".MainConfiguration"));
@@ -44,7 +45,7 @@ public class ConfigureService<C extends Configure> {
     }
 
     private Configure migrate(int fromVersion, Configure configure) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        if (fromVersion == CURRENT_VERSION) {
+        if (fromVersion == currentVersion) {
             return configure;
         }
         Configure result = getConfigure(fromVersion + 1).getConstructor().newInstance();
@@ -92,7 +93,7 @@ public class ConfigureService<C extends Configure> {
 
     @SuppressWarnings("unchecked")
     protected Class<? extends Configure> getConfigure(int version) throws ClassNotFoundException {
-        if (version == CURRENT_VERSION) {
+        if (version == currentVersion) {
             return (Class<? extends Configure>) Class.forName(classPrefix + ".MainConfiguration");
         } else {
             return (Class<? extends Configure>)
