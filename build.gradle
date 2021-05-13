@@ -17,6 +17,16 @@ subprojects {
 
     assemble.dependsOn(shadowJar)
 
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
     shadowJar {
         archiveName = "$baseName-$version.$extension"
         relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
@@ -28,6 +38,8 @@ subprojects {
     }
 
     artifacts {
+        archives sourcesJar
+        archives javadocJar
         archives shadowJar
     }
 }
