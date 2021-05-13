@@ -17,16 +17,18 @@ public class OrmService implements AutoCloseable {
 
         dependencyManager.checkDependencyMaven("org.hibernate.orm:hibernate-core:6.0.0.Alpha7:org.hibernate.Hibernate");
 
-        Configuration conf = new Configuration();
-        for (Class<? extends SodionEntity> entity : entities) {
-            conf.addAnnotatedClass(entity);
-        }
-        config.apply(conf);
-        conf.setProperty("hibernate.hbm2ddl.auto", "update");
+        {
+            Configuration conf = new Configuration();
+            for (Class<? extends SodionEntity> entity : entities) {
+                conf.addAnnotatedClass(entity);
+            }
+            config.apply(conf);
+            conf.setProperty("hibernate.hbm2ddl.auto", "update");
 
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .applySettings(conf.getProperties()).build();
-        sessionFactory = conf.buildSessionFactory(serviceRegistry);
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(conf.getProperties()).build();
+            sessionFactory = conf.buildSessionFactory(serviceRegistry);
+        }
     }
 
     @Override
