@@ -19,7 +19,8 @@ subprojects {
 
     publishing {
         publications {
-            shadow(MavenPublication) {
+            Library(MavenPublication) {
+                from components.java
                 artifact shadowJar
             }
         }
