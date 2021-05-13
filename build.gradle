@@ -25,15 +25,4 @@ subprojects {
         relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
         exclude('module-info.class')
     }
-
-    afterEvaluate {
-        publishing {
-            publications {
-                Library(MavenPublication) {
-                    from components.java
-                    artifact shadowJar
-                }
-            }
-        }
-    }
 }
