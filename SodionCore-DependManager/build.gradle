@@ -1,6 +1,6 @@
 plugins {
     id 'com.github.johnrengelman.shadow'
-    id 'war'
+    id 'java'
 }
 
 repositories {
