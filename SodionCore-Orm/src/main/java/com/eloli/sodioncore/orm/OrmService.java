@@ -15,6 +15,8 @@ public class OrmService implements AutoCloseable {
     public OrmService(DependencyManager dependencyManager, List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) throws Exception {
         dependencyManager.checkDependencyMaven(config.getDriverName());
 
+        dependencyManager.checkDependencyMaven("org.hibernate.orm:hibernate-core:6.0.0.Alpha7:org.hibernate.Hibernate");
+
         Configuration conf = new Configuration();
         for (Class<? extends SodionEntity> entity : entities) {
             conf.addAnnotatedClass(entity);

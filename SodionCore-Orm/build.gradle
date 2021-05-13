@@ -12,8 +12,7 @@ repositories {
 dependencies {
     compile project(':SodionCore-Base')
     compile project(':SodionCore-DependManager')
-    compile 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
-    compile 'org.hibernate.orm:hibernate-entitymanager:6.0.0.Alpha7'
+    compileOnly 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
 
     compileOnly 'com.google.code.gson:gson:2.8.6'
     compileOnly 'com.google.guava:guava:29.0-jre'
