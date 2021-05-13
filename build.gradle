@@ -17,15 +17,6 @@ subprojects {
 
     assemble.dependsOn(shadowJar)
 
-    publishing {
-        publications {
-            Library(MavenPublication) {
-                from components.java
-                artifact shadowJar
-            }
-        }
-    }
-
     shadowJar {
         relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
         relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
@@ -33,5 +24,16 @@ subprojects {
         relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
         relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
         exclude('module-info.class')
+    }
+
+    afterEvaluate {
+        publishing {
+            publications {
+                Library(MavenPublication) {
+                    from components.java
+                    artifact shadowJar
+                }
+            }
+        }
     }
 }
