@@ -132,10 +132,6 @@ public class DependencyManager {
                 File sourceFile = new File(sourcePath);
                 File relocatedFile = new File(relocatedPath);
                 if (!relocatedFile.exists()) {
-                    logger.info("Relocating " +
-                            artifactResult.getArtifact().getGroupId()
-                            + ":" + artifactResult.getArtifact().getArtifactId()
-                            + ":" + artifactResult.getArtifact().getVersion());
                     JarRelocator relocator = new JarRelocator(sourceFile, relocatedFile, rules);
                     try {
                         relocator.run();
@@ -144,10 +140,6 @@ public class DependencyManager {
                         throw new RuntimeException("Unable to relocate dependencies " + sourcePath, e);
                     }
                 }
-                logger.info("Injecting " +
-                        artifactResult.getArtifact().getGroupId()
-                        + ":" + artifactResult.getArtifact().getArtifactId()
-                        + ":" + artifactResult.getArtifact().getVersion());
                 reflectionClassLoader.addJarToClasspath(Paths.get(relocatedPath));
             } else {
                 logger.info("Failed " +
@@ -173,11 +165,11 @@ public class DependencyManager {
         }
 
         public void artifactDeployed(RepositoryEvent event) {
-            // logger.info("Deployed " + event.getArtifact() + " to " + event.getRepository());
+            //
         }
 
         public void artifactDeploying(RepositoryEvent event) {
-            // logger.info("Deploying " + event.getArtifact() + " to " + event.getRepository());
+            //
         }
 
         public void artifactDescriptorInvalid(RepositoryEvent event) {
@@ -190,43 +182,43 @@ public class DependencyManager {
         }
 
         public void artifactInstalled(RepositoryEvent event) {
-            // logger.info("Installed " + event.getArtifact() + " to " + event.getFile());
+            //
         }
 
         public void artifactInstalling(RepositoryEvent event) {
-            // logger.info("Installing " + event.getArtifact() + " to " + event.getFile());
+            //
         }
 
         public void artifactResolved(RepositoryEvent event) {
-            // logger.info("Resolved artifact " + event.getArtifact() + " from " + event.getRepository());
+            //;
         }
 
         public void artifactDownloading(RepositoryEvent event) {
-            logger.info("Downloading artifact " + event.getArtifact() + " from " + event.getRepository());
+            //
         }
 
         public void artifactDownloaded(RepositoryEvent event) {
-            logger.info("Downloaded artifact " + event.getArtifact() + " from " + event.getRepository());
+            //
         }
 
         public void artifactResolving(RepositoryEvent event) {
-            // logger.info("Resolving artifact " + event.getArtifact());
+            //
         }
 
         public void metadataDeployed(RepositoryEvent event) {
-            // logger.info("Deployed " + event.getMetadata() + " to " + event.getRepository());
+            //
         }
 
         public void metadataDeploying(RepositoryEvent event) {
-            // logger.info("Deploying " + event.getMetadata() + " to " + event.getRepository());
+            //
         }
 
         public void metadataInstalled(RepositoryEvent event) {
-            // logger.info("Installed " + event.getMetadata() + " to " + event.getFile());
+            //
         }
 
         public void metadataInstalling(RepositoryEvent event) {
-            // logger.info("Installing " + event.getMetadata() + " to " + event.getFile());
+            //
         }
 
         public void metadataInvalid(RepositoryEvent event) {
@@ -234,18 +226,17 @@ public class DependencyManager {
         }
 
         public void metadataResolved(RepositoryEvent event) {
-            logger.warn("Resolved metadata " + event.getMetadata() + " from " + event.getRepository());
+            //
         }
 
         public void metadataResolving(RepositoryEvent event) {
-            // logger.info("Resolving metadata " + event.getMetadata() + " from " + event.getRepository());
+            //
         }
     }
 
     public static class ConsoleTransferListener extends AbstractTransferListener {
         private final AbstractLogger logger;
-
-        private int lastLength;
+        private long time = System.currentTimeMillis();
 
         public ConsoleTransferListener(AbstractLogger logger) {
             this.logger = logger;
@@ -258,77 +249,22 @@ public class DependencyManager {
 
         @Override
         public void transferProgressed(TransferEvent event) {
-            //
-        }
-
-        private String getStatus(long complete, long total) {
-            if (total >= 1024) {
-                return toKB(complete) + "/" + toKB(total) + " KB ";
-            } else if (total >= 0) {
-                return complete + "/" + total + " B ";
-            } else if (complete >= 1024) {
-                return toKB(complete) + " KB ";
-            } else {
-                return complete + " B ";
-            }
-        }
-
-        private void pad(StringBuilder buffer, int spaces) {
-            String block = "                                        ";
-            while (spaces > 0) {
-                int n = Math.min(spaces, block.length());
-                buffer.append(block, 0, n);
-                spaces -= n;
+            long now = System.currentTimeMillis();
+            if(time + 1000 < now) {
+                time = now;
+                logger.info("Downloading: " + event.getResource().getRepositoryUrl() + event.getResource().getResourceName()
+                        + "( " + (int) (event.getTransferredBytes() * 100 / event.getResource().getContentLength()) + "%)");
             }
         }
 
         @Override
         public void transferSucceeded(TransferEvent event) {
-            transferCompleted(event);
-
-            TransferResource resource = event.getResource();
-            long contentLength = event.getTransferredBytes();
-            if (contentLength >= 0) {
-                String type = (event.getRequestType() == TransferEvent.RequestType.PUT ? "Uploaded" : "Downloaded");
-                String len = contentLength >= 1024 ? toKB(contentLength) + " KB" : contentLength + " B";
-
-                String throughput = "";
-                long duration = System.currentTimeMillis() - resource.getTransferStartTime();
-                if (duration > 0) {
-                    long bytes = contentLength - resource.getResumeOffset();
-                    DecimalFormat format = new DecimalFormat("0.0", new DecimalFormatSymbols(Locale.ENGLISH));
-                    double kbPerSec = (bytes / 1024.0) / (duration / 1000.0);
-                    throughput = " at " + format.format(kbPerSec) + " KB/sec";
-                }
-
-                logger.info(type + ": " + resource.getRepositoryUrl() + resource.getResourceName() + " (" + len
-                        + throughput + ")");
-            }
+            //
         }
 
         @Override
         public void transferFailed(TransferEvent event) {
-            transferCompleted(event);
-
-            if (!(event.getException() instanceof MetadataNotFoundException)) {
-                logger.warn("Transfer failed", event.getException());
-            }
-        }
-
-        private void transferCompleted(TransferEvent event) {
-            StringBuilder buffer = new StringBuilder(64);
-            pad(buffer, lastLength);
-            buffer.append('\r');
-            System.out.print(buffer.toString());
-        }
-
-        public void transferCorrupted(TransferEvent event) {
-            logger.warn("Corrupted transfer", event.getException());
-        }
-
-        @SuppressWarnings("checkstyle:magicnumber")
-        protected long toKB(long bytes) {
-            return (bytes + 1023) / 1024;
+            //
         }
     }
 
