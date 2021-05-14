@@ -44,12 +44,13 @@ public class DependencyManager {
     private final RepositorySystem repositorySystem;
     private final DefaultRepositorySystemSession repositorySystemSession;
     private final List<Relocation> rules;
+    private final String mapName;
 
     private final BaseFileService fileService;
     private final String mavenRepo;
     private final AbstractLogger logger;
 
-    public DependencyManager(BaseFileService fileService, AbstractLogger logger, Map<String, String> relocateMap, String mavenRepo) {
+    public DependencyManager(BaseFileService fileService, AbstractLogger logger, Map<String, String> relocateMap, String mapName, String mavenRepo) {
         this.fileService = fileService;
         this.logger = logger;
         this.mavenRepo = mavenRepo;
@@ -62,6 +63,7 @@ public class DependencyManager {
         relocateMap.forEach((key, value) -> {
             rules.add(new Relocation(key, value));
         });
+        this.mapName = mapName;
 
         DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
         locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
@@ -125,7 +127,8 @@ public class DependencyManager {
         for (ArtifactResult artifactResult : artifactResults) {
             if (artifactResult.isResolved()) {
                 String sourcePath = artifactResult.getArtifact().getFile().toPath().toString();
-                String relocatedPath = sourcePath.substring(0, sourcePath.length() - ".jar".length()) + "-relocated.jar";
+                String relocatedPath = sourcePath.substring(0, sourcePath.length() - ".jar".length())
+                        + "-" + mapName + "-relocated.jar";
                 File sourceFile = new File(sourcePath);
                 File relocatedFile = new File(relocatedPath);
                 if (!relocatedFile.exists()) {
@@ -153,6 +156,13 @@ public class DependencyManager {
                         + ":" + artifactResult.getArtifact().getVersion());
             }
         }
+    }
+
+    public DependencyManager addMap(Map<String,String> map){
+        map.forEach((key, value) -> {
+            rules.add(new Relocation(key, value));
+        });
+        return this;
     }
 
     public static class ConsoleRepositoryListener extends AbstractRepositoryListener {

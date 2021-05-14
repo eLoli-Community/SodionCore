@@ -1,0 +1,30 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'war'
+}
+repositories {
+    maven {
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+}
+dependencies {
+    compileOnly 'net.md-5:bungeecord-api:1.15-SNAPSHOT'
+    compile project(':SodionCore-Base')
+    compile project(':SodionCore-DependManager')
+    compile project(':SodionCore-Orm')
+}
+
+processResources {
+    expand(version: version)
+}
+
+shadowJar {
+    relocate('org.apache.maven', 'com.eloli.sodioncore.libs.maven')
+    relocate('org.apache.http', 'com.eloli.sodioncore.libs.http')
+    relocate('org.apache.commons', 'com.eloli.sodioncore.libs.commons')
+    relocate('org.objectweb.asm', 'com.eloli.sodioncore.libs.asm')
+    relocate('org.codehaus.plexus', 'com.eloli.sodioncore.libs.plexus')
+    exclude('module-info.class')
+}
+
+assemble.dependsOn(shadowJar)

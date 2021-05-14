@@ -1,0 +1,7 @@
+name: SodionCore
+version: ${version}
+main: com.eloli.sodioncore.bungee.SodionCore
+authors:
+  - InkerBot
+description: SodionCore for Bungee
+website: https://mohistmc.com/

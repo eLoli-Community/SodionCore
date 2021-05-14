@@ -1,0 +1,7 @@
+name: SodionCore
+version: ${version}
+main: com.eloli.sodioncore.bukkit.SodionCore
+authors:
+  - InkerBot
+description: SodionCore for Bukkit
+website: https://mohistmc.com/
