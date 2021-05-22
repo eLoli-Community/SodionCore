@@ -1,4 +1,4 @@
-package com.eloli.sodioncore.bukkit.config;
+package com.eloli.sodioncore.bungee.config;
 
 import com.eloli.sodioncore.config.Configure;
 import com.eloli.sodioncore.config.Lore;
@@ -9,9 +9,9 @@ import com.eloli.sodioncore.orm.configure.PostgreSqlConfigure;
 import com.eloli.sodioncore.orm.configure.SqliteConfigure;
 import com.google.gson.annotations.Expose;
 
-public class MainConfiguration extends Configure {
+public class Configuration extends Configure {
     @Expose(serialize = true, deserialize = false)
-    public Integer version = 2;
+    public Integer version = 0;
 
     @Lore("Maven Repo Url")
     @Lore("If you are in China, you should use this")

@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 
 public class MainConfiguration extends Configure {
     @Expose(serialize = true, deserialize = false)
-    public Integer version = 2;
+    public Integer version = 1;
 
     @Lore("The default language should message use.")
     @Migrate("defaultLang")

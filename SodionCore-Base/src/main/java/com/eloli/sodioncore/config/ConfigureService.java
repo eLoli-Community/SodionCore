@@ -7,23 +7,33 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 public class ConfigureService<C extends Configure> {
-    protected final int currentVersion;
-
-    protected final String classPrefix;
     protected final File configFile;
+    protected final String configName;
     protected final BaseFileService fileService;
-
+    protected final HashMap<Integer, Class<? extends Configure>> configureMap = new HashMap<>();
+    protected final HashMap<Integer, Class<? extends Migrater<?, ?>>> migraterMap = new HashMap<>();
     public C instance;
+    protected int currentVersion;
+
+    public ConfigureService(BaseFileService fileService, String configName) {
+        configFile = new File(fileService.getConfigPath(configName));
+        this.configName = configName;
+        this.fileService = fileService;
+    }
+
+    public ConfigureService<C> register(Class<? extends Migrater<?, ?>> migraterClass, Class<? extends Configure> configureClass) {
+        migraterMap.put(migraterMap.size(), migraterClass);
+        configureMap.put(configureMap.size(), configureClass);
+        return this;
+    }
 
     @SuppressWarnings("unchecked")
-    public ConfigureService(BaseFileService fileService, String configName, String classPrefix, int currentVersion) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
-        this.fileService = fileService;
-        this.classPrefix = classPrefix;
-        configFile = new File(fileService.getConfigPath(configName));
+    public ConfigureService<C> init() throws Exception {
+        this.currentVersion = configureMap.size() - 1;
         fileService.saveResource("probeResource", true);
-        this.currentVersion = currentVersion;
         try {
             FileInputStream fileReader = new FileInputStream(configFile);
             InputStreamReader inputStreamReader = new InputStreamReader(fileReader, StandardCharsets.UTF_8);
@@ -34,14 +44,14 @@ public class ConfigureService<C extends Configure> {
             if (version < currentVersion) {
                 instance = (C) migrate(version, ConfigGson.reader.fromJson(result, getConfigure(version)));
             } else {
-                instance = (C) ConfigGson.reader.fromJson(result, Class.forName(classPrefix + ".MainConfiguration"));
+                instance = (C) ConfigGson.reader.fromJson(result, getConfigure(currentVersion));
             }
         } catch (FileNotFoundException e) {
-            instance = (C) Class.forName(classPrefix + ".MainConfiguration").getConstructor().newInstance();
+            instance = (C) getConfigure(currentVersion).getConstructor().newInstance();
         }
 
         save();
-
+        return this;
     }
 
     private Configure migrate(int fromVersion, Configure configure) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
@@ -50,7 +60,9 @@ public class ConfigureService<C extends Configure> {
         }
         Configure result = getConfigure(fromVersion + 1).getConstructor().newInstance();
         replace(result, configure);
-        getMigrator(fromVersion).getConstructor().newInstance().migrate(configure, result);
+        if (getMigrator(fromVersion + 1) != null) {
+            getMigrator(fromVersion + 1).getConstructor().newInstance().migrate(configure, result);
+        }
         return migrate(fromVersion + 1, result);
     }
 
@@ -86,19 +98,13 @@ public class ConfigureService<C extends Configure> {
     }
 
     @SuppressWarnings("unchecked")
-    protected Class<? extends Migrater<Configure, Configure>> getMigrator(int version) throws ClassNotFoundException {
-        return (Class<? extends Migrater<Configure, Configure>>)
-                Class.forName(classPrefix + ".migrates.MigrateFrom" + version);
+    protected Class<? extends Migrater<Configure, Configure>> getMigrator(int toVersion) {
+        return (Class<? extends Migrater<Configure, Configure>>) migraterMap.get(toVersion);
     }
 
     @SuppressWarnings("unchecked")
     protected Class<? extends Configure> getConfigure(int version) throws ClassNotFoundException {
-        if (version == currentVersion) {
-            return (Class<? extends Configure>) Class.forName(classPrefix + ".MainConfiguration");
-        } else {
-            return (Class<? extends Configure>)
-                    Class.forName(classPrefix + ".migrates.HistoryConfiguration" + version);
-        }
+        return configureMap.get(version);
     }
 
     public void save() throws IOException {

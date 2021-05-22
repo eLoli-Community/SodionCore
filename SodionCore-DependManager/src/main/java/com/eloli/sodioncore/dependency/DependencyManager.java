@@ -25,17 +25,13 @@ import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transfer.AbstractTransferListener;
-import org.eclipse.aether.transfer.MetadataNotFoundException;
 import org.eclipse.aether.transfer.TransferEvent;
-import org.eclipse.aether.transfer.TransferResource;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.filter.DependencyFilterUtils;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public class DependencyManager {
@@ -150,7 +146,7 @@ public class DependencyManager {
         }
     }
 
-    public DependencyManager addMap(Map<String,String> map){
+    public DependencyManager addMap(Map<String, String> map) {
         map.forEach((key, value) -> {
             rules.add(new Relocation(key, value));
         });
@@ -250,7 +246,7 @@ public class DependencyManager {
         @Override
         public void transferProgressed(TransferEvent event) {
             long now = System.currentTimeMillis();
-            if(time + 1000 < now) {
+            if (time + 1000 < now) {
                 time = now;
                 logger.info("Downloading: " + event.getResource().getRepositoryUrl() + event.getResource().getResourceName()
                         + "( " + (int) (event.getTransferredBytes() * 100 / event.getResource().getContentLength()) + "%)");

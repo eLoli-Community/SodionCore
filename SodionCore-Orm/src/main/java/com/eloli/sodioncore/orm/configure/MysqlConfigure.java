@@ -1,6 +1,5 @@
 package com.eloli.sodioncore.orm.configure;
 
-import com.eloli.sodioncore.config.Migrate;
 import com.google.gson.annotations.Expose;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.MySQLDialect;

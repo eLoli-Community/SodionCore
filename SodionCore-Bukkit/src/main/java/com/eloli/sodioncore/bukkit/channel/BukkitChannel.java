@@ -12,17 +12,18 @@ public class BukkitChannel {
             JavaPlugin plugin, MessageChannel messageChannel,
             AbstractLogger logger, PacketReceiveListener listener) {
         plugin.getServer().getMessenger()
-            .registerIncomingPluginChannel(plugin, messageChannel.name,
-                (channel, player, message) -> { try {
-                listener.onPacketReceive(player, messageChannel.getClientFactory(message).parser(message),
-                    packet -> player.sendPluginMessage(plugin, messageChannel.name,
-                            ((PacketFactory<ServerPacket>) messageChannel.getServerFactory(packet.getClass()))
-                                    .encode(packet))
-                    );
-                } catch (BadSignException e) {
-                    logger.info("Bad sign", e);
-                }
-            });
+                .registerIncomingPluginChannel(plugin, messageChannel.name,
+                        (channel, player, message) -> {
+                            try {
+                                listener.onPacketReceive(player, messageChannel.getClientFactory(message).parser(message),
+                                        packet -> player.sendPluginMessage(plugin, messageChannel.name,
+                                                ((PacketFactory<ServerPacket>) messageChannel.getServerFactory(packet.getClass()))
+                                                        .encode(packet))
+                                );
+                            } catch (BadSignException e) {
+                                logger.info("Bad sign", e);
+                            }
+                        });
         plugin.getServer().getMessenger()
                 .registerOutgoingPluginChannel(plugin, messageChannel.name);
     }

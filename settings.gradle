@@ -3,5 +3,6 @@ include(':SodionCore-DependManager')
 include(':SodionCore-Base')
 include(':SodionCore-Orm')
 include(':SodionCore-Bukkit')
-include 'SodionCore-Bungee'
+include(':SodionCore-Bungee')
+include(':SodionCore-Sponge')
 

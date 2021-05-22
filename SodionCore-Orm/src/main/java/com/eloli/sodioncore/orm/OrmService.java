@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrmService implements AutoCloseable {
-    public SessionFactory sessionFactory;
     private final List<Class<? extends SodionEntity>> entities;
     private final DatabaseConfigure config;
+    public SessionFactory sessionFactory;
 
     public OrmService(DependencyManager dependencyManager, List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) {
         dependencyManager.checkDependencyMaven(config.getDriverName());
@@ -20,13 +20,13 @@ public class OrmService implements AutoCloseable {
         this.entities = new ArrayList<>(entities);
         this.config = config;
 
-        sessionFactory = new HibernateBoot(entities,config).sessionFactory;
+        sessionFactory = new HibernateBoot(entities, config).sessionFactory;
     }
 
-    public void addEntities(List<Class<? extends SodionEntity>> entities){
+    public void addEntities(List<Class<? extends SodionEntity>> entities) {
         this.entities.addAll(entities);
         sessionFactory.close();
-        sessionFactory = new HibernateBoot(entities,config).sessionFactory;
+        sessionFactory = new HibernateBoot(entities, config).sessionFactory;
     }
 
     @Override

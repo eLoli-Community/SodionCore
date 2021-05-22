@@ -1,12 +1,12 @@
-package com.eloli.sodioncore.bukkit.logger;
+package com.eloli.sodioncore.sponge;
 
 import com.eloli.sodioncore.logger.AbstractLogger;
 import org.slf4j.Logger;
 
-public class PaperLogger implements AbstractLogger {
+public class SpongeLogger implements AbstractLogger {
     private final Logger logger;
 
-    public PaperLogger(Logger logger) {
+    public SpongeLogger(Logger logger) {
         this.logger = logger;
     }
 

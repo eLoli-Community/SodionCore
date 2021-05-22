@@ -8,9 +8,11 @@ import java.util.logging.Logger;
 
 public class BungeeLogger implements AbstractLogger {
     private final Logger logger;
-    public BungeeLogger(Plugin plugin){
+
+    public BungeeLogger(Plugin plugin) {
         logger = plugin.getLogger();
     }
+
     @Override
     public void info(String info) {
         logger.info(info);

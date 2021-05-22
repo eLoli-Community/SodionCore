@@ -1,9 +1,7 @@
 package com.eloli.sodioncore.orm.configure;
 
-import com.eloli.sodioncore.config.Migrate;
 import com.google.gson.annotations.Expose;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.H2Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 
 public class SqliteConfigure extends DatabaseConfigure {

@@ -10,7 +10,8 @@ import java.util.List;
 
 public class HibernateBoot {
     public SessionFactory sessionFactory;
-    public HibernateBoot(List<Class<? extends SodionEntity>> entities, DatabaseConfigure config){
+
+    public HibernateBoot(List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) {
         Configuration conf = new Configuration();
         for (Class<? extends SodionEntity> entity : entities) {
             conf.addAnnotatedClass(entity);

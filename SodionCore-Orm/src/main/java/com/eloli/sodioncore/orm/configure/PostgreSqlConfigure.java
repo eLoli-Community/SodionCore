@@ -2,7 +2,6 @@ package com.eloli.sodioncore.orm.configure;
 
 import com.google.gson.annotations.Expose;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.MySQLDialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 
 public class PostgreSqlConfigure extends DatabaseConfigure {

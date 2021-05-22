@@ -5,6 +5,9 @@ allprojects {
     group = 'com.eloli.sodioncore'
     version = '1.0-SNAPSHOT'
 }
+
+compileJava.options.encoding = 'UTF-8'
+
 subprojects {
     apply plugin: 'java'
     repositories {
