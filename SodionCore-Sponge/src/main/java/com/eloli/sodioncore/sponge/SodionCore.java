@@ -4,6 +4,7 @@ import com.eloli.sodioncore.config.ConfigureService;
 import com.eloli.sodioncore.dependency.DependencyManager;
 import com.eloli.sodioncore.file.BaseFileService;
 import com.eloli.sodioncore.logger.AbstractLogger;
+import com.eloli.sodioncore.orm.AbstractSodionCore;
 import com.eloli.sodioncore.orm.OrmService;
 import com.eloli.sodioncore.orm.configure.DatabaseConfigure;
 import com.eloli.sodioncore.sponge.config.Configuration;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Plugin(id = "sodioncore")
-public class SodionCore {
+public class SodionCore implements AbstractSodionCore {
     private final Map<String, DependencyManager> dependencyManager = new HashMap<>();
     @Inject
     private Logger spongeLogger;
@@ -38,7 +39,7 @@ public class SodionCore {
     public void onServerStart(GameStartedServerEvent event) {
         baseFileService = new BaseFileService(Sponge.getConfigManager().getPluginConfig(this).getConfigPath().toString());
         try {
-            configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
+            configureService = new ConfigureService<Configuration>(baseFileService, configDir + "/config.json")
                     .register(null, Configuration.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,6 +67,7 @@ public class SodionCore {
         return null;
     }
 
+    @Override
     public DependencyManager getDependencyManager(String name, String version) {
         DependencyManager result = dependencyManager.get(name);
         if (result == null) {
@@ -80,6 +82,7 @@ public class SodionCore {
         return result;
     }
 
+    @Override
     public OrmService getOrmService() {
         return ormService;
     }

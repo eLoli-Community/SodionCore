@@ -6,6 +6,7 @@ import com.eloli.sodioncore.config.ConfigureService;
 import com.eloli.sodioncore.dependency.DependencyManager;
 import com.eloli.sodioncore.file.BaseFileService;
 import com.eloli.sodioncore.logger.AbstractLogger;
+import com.eloli.sodioncore.orm.AbstractSodionCore;
 import com.eloli.sodioncore.orm.OrmService;
 import com.eloli.sodioncore.orm.configure.DatabaseConfigure;
 import org.bukkit.plugin.Plugin;
@@ -15,9 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SodionCore extends JavaPlugin {
+public class SodionCore extends JavaPlugin implements AbstractSodionCore {
     private static final Map<String, DependencyManager> dependencyManager = new HashMap<>();
-    public static OrmService ormService;
+    private static OrmService ormService;
     private static BaseFileService baseFileService;
     private static ConfigureService<Configuration> configureService;
     private static DatabaseConfigure databaseConfigure;
@@ -50,16 +51,26 @@ public class SodionCore extends JavaPlugin {
     }
 
     public DependencyManager getDependencyManager(Plugin plugin) {
-        DependencyManager result = dependencyManager.get(plugin.getName());
+        return getDependencyManager(plugin.getName(), plugin.getDescription().getVersion());
+    }
+
+    @Override
+    public DependencyManager getDependencyManager(String name, String version) {
+        DependencyManager result = dependencyManager.get(name);
         if (result == null) {
             result = new DependencyManager(
                     baseFileService,
                     logger,
                     new HashMap<>(),
-                    plugin.getName() + "-" + plugin.getDescription().getVersion(),
+                    name + "-" + version,
                     configureService.instance.mavenRepository);
-            dependencyManager.put(plugin.getName(), result);
+            dependencyManager.put(name, result);
         }
         return result;
+    }
+
+    @Override
+    public OrmService getOrmService() {
+        return ormService;
     }
 }
