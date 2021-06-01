@@ -39,8 +39,9 @@ public class SodionCore implements AbstractSodionCore {
     public void onServerStart(GameStartedServerEvent event) {
         baseFileService = new BaseFileService(Sponge.getConfigManager().getPluginConfig(this).getConfigPath().toString());
         try {
-            configureService = new ConfigureService<Configuration>(baseFileService, configDir + "/config.json")
+            configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
                     .register(null, Configuration.class);
+            configureService.init();
         } catch (Exception e) {
             e.printStackTrace();
             Sponge.getServer().shutdown();

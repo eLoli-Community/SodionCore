@@ -8,6 +8,7 @@ import com.eloli.sodioncore.logger.AbstractLogger;
 import com.eloli.sodioncore.orm.AbstractSodionCore;
 import com.eloli.sodioncore.orm.OrmService;
 import com.eloli.sodioncore.orm.configure.DatabaseConfigure;
+import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class SodionCore extends Plugin implements AbstractSodionCore {
         try {
             configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
                     .register(null, Configuration.class);
+            configureService.init();
         } catch (Exception e) {
             e.printStackTrace();
             getProxy().stop();
@@ -45,7 +47,7 @@ public class SodionCore extends Plugin implements AbstractSodionCore {
 
         ormService = new OrmService(getDependencyManager(this), new ArrayList<>(), databaseConfigure);
 
-
+        getProxy().getPluginManager().callEvent(new SodionCoreBootEvent());
     }
 
     public DependencyManager getDependencyManager(Plugin plugin) {

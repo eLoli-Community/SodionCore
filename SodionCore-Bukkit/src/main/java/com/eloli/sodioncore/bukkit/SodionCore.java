@@ -30,6 +30,7 @@ public class SodionCore extends JavaPlugin implements AbstractSodionCore {
         try {
             configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
                     .register(null, Configuration.class);
+            configureService.init();
         } catch (Exception e) {
             e.printStackTrace();
             getServer().shutdown();
