@@ -1,5 +1,6 @@
 name: SodionCore
 version: ${version}
+load: STARTUP
 main: com.eloli.sodioncore.bukkit.SodionCore
 authors:
   - InkerBot
