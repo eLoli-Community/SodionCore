@@ -4,5 +4,5 @@ include(':SodionCore-Base')
 include(':SodionCore-Orm')
 include(':SodionCore-Bukkit')
 include(':SodionCore-Bungee')
-include(':SodionCore-Sponge')
-
+// include(':SodionCore-Sponge')
+include(':SodionCore-Sponge7')

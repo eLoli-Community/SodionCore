@@ -95,11 +95,8 @@ public class DependencyManager {
         String version = splits[2];
         String className = splits[3];
 
-        try {
-            Class.forName(className);
+        if(reflectionClassLoader.testClasses(className)){
             return;
-        } catch (ClassNotFoundException ignore) {
-
         }
 
         File librariesPath = new File(fileService.getConfigPath("libraries"));
