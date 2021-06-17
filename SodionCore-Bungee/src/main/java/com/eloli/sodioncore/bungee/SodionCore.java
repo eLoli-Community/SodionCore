@@ -24,7 +24,7 @@ public class SodionCore extends Plugin implements AbstractSodionCore {
     private static AbstractLogger logger;
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         baseFileService = new BaseFileService(getDataFolder().toString());
         try {
             configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
@@ -46,8 +46,6 @@ public class SodionCore extends Plugin implements AbstractSodionCore {
         }
 
         ormService = new OrmService(new ArrayList<>(), databaseConfigure);
-
-        getProxy().getPluginManager().callEvent(new SodionCoreBootEvent());
     }
 
     public DependencyManager getDependencyManager(Plugin plugin) {
