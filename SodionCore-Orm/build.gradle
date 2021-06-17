@@ -1,8 +1,5 @@
 dependencies {
-    compile project(':SodionCore-Base')
-    compile project(':SodionCore-DependManager')
-    compileOnly 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
-
-    testRuntimeOnly 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
-    testRuntimeOnly 'com.h2database:h2:1.4.200'
+    implementation project(':SodionCore-Base')
+    implementation project(':SodionCore-DependManager')
+    implementation 'org.hibernate.orm:hibernate-core:6.0.0.Alpha7'
 }

@@ -1,6 +1,5 @@
 package com.eloli.sodioncore.orm;
 
-import com.eloli.sodioncore.dependency.DependencyManager;
 import com.eloli.sodioncore.orm.configure.DatabaseConfigure;
 import org.hibernate.SessionFactory;
 
@@ -12,11 +11,7 @@ public class OrmService implements AutoCloseable {
     private final DatabaseConfigure config;
     public SessionFactory sessionFactory;
 
-    public OrmService(DependencyManager dependencyManager, List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) {
-        dependencyManager.checkDependencyMaven(config.getDriverName());
-
-        dependencyManager.checkDependencyMaven("org.hibernate.orm:hibernate-core:6.0.0.Alpha7:org.hibernate.Hibernate");
-
+    public OrmService(List<Class<? extends SodionEntity>> entities, DatabaseConfigure config) {
         this.entities = new ArrayList<>(entities);
         this.config = config;
 

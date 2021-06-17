@@ -45,7 +45,7 @@ public class SodionCore extends Plugin implements AbstractSodionCore {
             getProxy().stop();
         }
 
-        ormService = new OrmService(getDependencyManager(this), new ArrayList<>(), databaseConfigure);
+        ormService = new OrmService(new ArrayList<>(), databaseConfigure);
 
         getProxy().getPluginManager().callEvent(new SodionCoreBootEvent());
     }

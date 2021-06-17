@@ -46,7 +46,7 @@ public class SodionCore extends JavaPlugin implements AbstractSodionCore {
             getServer().shutdown();
         }
 
-        ormService = new OrmService(getDependencyManager(this), new ArrayList<>(), databaseConfigure);
+        ormService = new OrmService(new ArrayList<>(), databaseConfigure);
 
 
     }

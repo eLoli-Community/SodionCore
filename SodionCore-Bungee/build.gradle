@@ -8,9 +8,9 @@ repositories {
 }
 dependencies {
     compileOnly 'net.md-5:bungeecord-api:1.15-SNAPSHOT'
-    compile project(':SodionCore-Base')
-    compile project(':SodionCore-DependManager')
-    compile project(':SodionCore-Orm')
+    implementation project(':SodionCore-Base')
+    implementation project(':SodionCore-DependManager')
+    implementation project(':SodionCore-Orm')
 }
 
 processResources {

@@ -14,6 +14,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -37,7 +38,7 @@ public class SodionCore implements AbstractSodionCore {
     private OrmService ormService;
 
     @Listener(order = Order.PRE)
-    public void onServerStart(GameStartedServerEvent event) {
+    public void onServerStart(GameInitializationEvent event) {
         baseFileService = new BaseFileService(Sponge.getConfigManager().getPluginConfig(this).getConfigPath().toString());
         try {
             configureService = new ConfigureService<Configuration>(baseFileService, "config.json")
@@ -58,7 +59,7 @@ public class SodionCore implements AbstractSodionCore {
             Sponge.getServer().shutdown();
         }
 
-        ormService = new OrmService(getDependencyManager(this), new ArrayList<>(), databaseConfigure);
+        ormService = new OrmService(new ArrayList<>(), databaseConfigure);
     }
 
     public DependencyManager getDependencyManager(Object plugin) {
